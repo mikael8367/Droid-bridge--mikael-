@@ -1,0 +1,36 @@
+name: Extrair ZIP no repositorio
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extrair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositorio
+        uses: actions/checkout@v4
+
+      - name: Extrair ZIP sem sobrescrever arquivos existentes
+        run: |
+          ZIP="DroidBridgeLauncher_-mikael-_creator_MODIFICADO (1).zip"
+          if [ ! -f "$ZIP" ]; then
+            echo "Arquivo ZIP nao encontrado: $ZIP"
+            exit 1
+          fi
+          unzip -n "$ZIP" -d .
+          echo "Conteudo do ZIP extraido."
+
+      - name: Salvar arquivos extraidos no repositorio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nenhum arquivo novo para salvar."
+            exit 0
+          fi
+          git commit -m "Extrair conteudo do ZIP no repositorio"
+          git push
