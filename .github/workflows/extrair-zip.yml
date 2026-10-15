@@ -21,8 +21,8 @@ jobs:
             echo "Arquivo ZIP nao encontrado: $ZIP"
             exit 1
           fi
-          unzip -n "$ZIP" -d .
-          echo "Conteudo do ZIP extraido."
+          unzip -n "$ZIP" -d . -x '.github/workflows/*'
+          echo "Conteudo do ZIP extraido; workflows internos ignorados."
 
       - name: Salvar arquivos extraidos no repositorio
         run: |
