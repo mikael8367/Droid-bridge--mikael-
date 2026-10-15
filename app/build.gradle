@@ -11,6 +11,7 @@ if (localPropertiesFile.exists()) {
 def buildConfigString = { String value ->
     '"' + (value ?: '').replace('\\', '\\\\').replace('"', '\\"') + '"'
 }
+def microsoftRedirectUri = localProperties.getProperty('MICROSOFT_REDIRECT_URI', project.findProperty('MICROSOFT_REDIRECT_URI') ?: 'droidbridge://auth')
 
 android {
     namespace launcherPackage
@@ -25,8 +26,9 @@ android {
         versionName '0.1.0'
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+        manifestPlaceholders = [appAuthRedirectScheme: microsoftRedirectUri.tokenize(':')[0]]
         buildConfigField 'String', 'MICROSOFT_CLIENT_ID', buildConfigString(localProperties.getProperty('MICROSOFT_CLIENT_ID', project.findProperty('MICROSOFT_CLIENT_ID') ?: 'CHANGE_ME'))
-        buildConfigField 'String', 'MICROSOFT_REDIRECT_URI', buildConfigString(localProperties.getProperty('MICROSOFT_REDIRECT_URI', project.findProperty('MICROSOFT_REDIRECT_URI') ?: 'droidbridge://auth'))
+        buildConfigField 'String', 'MICROSOFT_REDIRECT_URI', buildConfigString(microsoftRedirectUri)
         buildConfigField 'String', 'MICROSOFT_SCOPE', buildConfigString(localProperties.getProperty('MICROSOFT_SCOPE', project.findProperty('MICROSOFT_SCOPE') ?: 'XboxLive.signin offline_access'))
         buildConfigField 'String', 'GAME_DIRECTORY_NAME', buildConfigString('.minecraft')
         buildConfigField 'String', 'CURSEFORGE_API_KEY', buildConfigString(localProperties.getProperty('CURSEFORGE_API_KEY', project.findProperty('CURSEFORGE_API_KEY') ?: ''))
