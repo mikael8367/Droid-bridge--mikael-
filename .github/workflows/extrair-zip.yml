@@ -2,6 +2,8 @@ name: Extrair ZIP no repositorio
 
 on:
   push:
+    paths:
+      - 'DroidBridgeLauncher_-mikael-_creator_MODIFICADO (1).zip'
   workflow_dispatch:
 
 permissions:
